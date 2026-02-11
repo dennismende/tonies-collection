@@ -55,8 +55,8 @@ test.describe("Public Catalog", () => {
         const searchInput = page.getByPlaceholder(/search/i);
         await searchInput.fill("zzz_nonexistent_figure_zzz");
 
-        // Wait for debounce
-        await page.waitForTimeout(400);
+        // Wait for the URL to update (debounce + navigation)
+        await page.waitForURL(/.*q=zzz_nonexistent_figure_zzz.*/);
 
         // Should show empty state or no cards
         const emptyState = page.getByText(/no tonies match/i);
