@@ -1,0 +1,90 @@
+{
+  "collection": {
+    "title": "Tonies Collection",
+    "subtitle": "Browse our family's collection of Tonie box figures",
+    "emptyState": "No tonies in the collection yet.",
+    "emptyFilterState": "No tonies match your filters.",
+    "showingResults": "Showing {count} of {total} tonies",
+    "clearFilters": "Clear filters",
+    "searchPlaceholder": "Search tonies…",
+    "favoritesOnly": "Favorites only",
+    "allSeries": "All series",
+    "gridView": "Grid view",
+    "listView": "List view",
+    "backToCollection": "← Back to collection"
+  },
+  "sort": {
+    "label": "Sort by",
+    "nameAsc": "Name (A → Z)",
+    "nameDesc": "Name (Z → A)",
+    "newestFirst": "Newest first",
+    "oldestFirst": "Oldest first",
+    "priceLowHigh": "Price (low → high)",
+    "priceHighLow": "Price (high → low)"
+  },
+  "detail": {
+    "purchaseDate": "Purchase date",
+    "price": "Price",
+    "notes": "Notes",
+    "trackList": "Track list",
+    "noTracks": "No tracks available",
+    "favorite": "Favorite",
+    "creativeTonie": "Creative Tonie",
+    "edit": "Edit"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "login": "Log in",
+    "logout": "Log out",
+    "email": "Email",
+    "password": "Password",
+    "loginError": "Invalid email or password",
+    "addNew": "Add new Tonie",
+    "importFromUrl": "Import from URL",
+    "editTonie": "Edit Tonie",
+    "deleteTonie": "Delete Tonie",
+    "deleteConfirm": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "delete": "Delete",
+    "deleting": "Deleting…"
+  },
+  "form": {
+    "name": "Name",
+    "namePlaceholder": "e.g. The Lion King",
+    "series": "Series",
+    "seriesPlaceholder": "e.g. Disney",
+    "image": "Image",
+    "imageHint": "JPEG, PNG, or WebP. Max 5 MB.",
+    "purchaseDate": "Purchase date",
+    "price": "Price (EUR)",
+    "pricePlaceholder": "0.00",
+    "notes": "Notes",
+    "notesPlaceholder": "Any additional notes…",
+    "favorite": "Mark as favorite",
+    "creativeTonie": "This is a Creative Tonie",
+    "trackList": "Track list",
+    "addTrack": "Add track",
+    "removeTrack": "Remove track",
+    "trackPlaceholder": "Track name"
+  },
+  "import": {
+    "title": "Import from URL",
+    "urlLabel": "Tonies.com product URL",
+    "urlPlaceholder": "https://tonies.com/en-gb/tonies/...",
+    "fetch": "Fetch",
+    "fetching": "Fetching…",
+    "invalidUrl": "Please enter a valid tonies.com URL",
+    "fetchError": "Failed to fetch the page. Please check the URL.",
+    "noData": "Could not extract product data from this URL.",
+    "duplicateWarning": "A figure with this name already exists.",
+    "preview": "Preview imported data"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "notFound": "Page not found",
+    "notFoundDescription": "The page you're looking for doesn't exist."
+  }
+}
