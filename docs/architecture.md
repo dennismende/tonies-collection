@@ -242,11 +242,24 @@ Before finishing, run a self-review checklist:
 - [ ] Is this accessible (ARIA)?
 - [ ] Did I add JSDoc to exported functions?
 - [ ] Did I update `docs/traceability.md`?
+- [ ] ESLint passes (pre-commit hooks are not a substitute for verifying
+      before commit).
+- [ ] **For UI/interaction changes:** runtime verification in a browser
+      confirms the fix works. Static analysis alone is insufficient — type-check
+      and unit tests cannot catch timing-dependent or stateful UI bugs.
 
 For UI-specific checks, see the checklist in
 [`design-system.md`](design-system.md) §11.
 
-Add an **"Architectural Remarks"** section to any PR or spec listing potential trade-offs or risks.
+Add an **"Architectural Remarks"** section to any PR or spec listing potential
+trade-offs or risks. Each remark section must include:
+
+1. One potential scalability risk.
+2. One potential security risk.
+3. Verify change does not contradict any ADR in `docs/adr/`.
+4. **Verification method:** can this change be validated by static analysis
+   alone (type-check + unit tests), or does it require runtime / browser
+   testing? If runtime, specify the exact scenario to verify.
 
 ---
 

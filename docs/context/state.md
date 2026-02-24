@@ -22,6 +22,7 @@ _None._
 
 | Date | Change |
 |---|---|
+| 2026-02-24 | Added runtime verification requirement to review checklist |
 | 2026-02-24 | Fix search input debounce race condition (SPEC-SEARCH-FILTER v1.1.0) |
 | 2026-02-24 | Adopted governance model: ADRs, traceability, commitlint |
 | 2026-02-11 | CI/CD pipeline (GitHub Actions + Husky pre-commit) |
