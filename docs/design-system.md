@@ -18,6 +18,19 @@
 
 ---
 
+## 1b. Styling Constraints
+
+These rules are **non-negotiable** and enforced during code review.
+
+| Constraint | Rule |
+|---|---|
+| **No magic values** | Never use raw hex codes, pixel values, or ad-hoc spacing. Use semantic tokens only (`bg-primary`, `p-4`, `text-muted-foreground`). |
+| **Shadcn components only** | Do not build generic HTML elements (`<button>`, `<input>`, `<select>`). Always use the corresponding Shadcn primitive. |
+| **No inline styles** | All styling goes through Tailwind utility classes. No `style={{}}` attributes. |
+| **Design system is law** | Do not invent new visual patterns. If a component doesn't exist in Shadcn, propose adding it via the spec process before implementing. |
+
+---
+
 ## 2. Color Palette
 
 Built on Shadcn UI's CSS variables. Light mode only.
@@ -38,9 +51,6 @@ Built on Shadcn UI's CSS variables. Light mode only.
 | `destructive` | `--destructive` | Delete actions, error states (`#ef4444`) |
 | `border` | `--border` | Card/input borders (`#e5e5e5`) |
 | `ring` | `--ring` | Focus rings (`#171717`) |
-
-> **Rule:** No magic hex values in components. Always use semantic tokens:
-> `bg-primary`, `text-muted-foreground`, `border-border`, etc.
 
 ---
 
@@ -83,8 +93,6 @@ Built on Shadcn UI's CSS variables. Light mode only.
 ---
 
 ## 5. Component Library (Shadcn UI)
-
-All UI is built from Shadcn primitives. No custom generic HTML elements.
 
 ### Components to install
 
@@ -183,3 +191,28 @@ elements.
 | Toast | Slide in from bottom | Via Sonner defaults |
 | Delete dialog | Fade overlay + scale content | Via Shadcn AlertDialog defaults |
 | Skeleton | Pulse | `animate-pulse` (Tailwind default) |
+
+---
+
+## 11. Contribution Guidelines
+
+### The Design System is Law
+
+All UI contributions **must** use the tokens, components, and patterns defined in this document. Deviations require a spec update approved before implementation.
+
+### Self-Review Checklist (UI)
+
+Before submitting any UI change, verify:
+
+- [ ] All colors use semantic tokens (no raw hex values).
+- [ ] All interactive elements use Shadcn components.
+- [ ] All form inputs have associated `<Label>` elements.
+- [ ] Focus states are visible and meet WCAG 2.1 AA.
+- [ ] The layout is responsive across all breakpoints.
+- [ ] Animations use the specified durations and easings.
+
+### Governance
+
+The general **Devil's Advocate Protocol** (for both code and UI violations) is
+defined in [`architecture.md`](architecture.md) §12. For UI-specific violations,
+also cite the relevant section from this document.

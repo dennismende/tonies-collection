@@ -1,6 +1,12 @@
+---
+id: SPEC-DETAIL
+version: 1.0.0
+status: active
+adr-refs: [ADR-002, ADR-003]
+---
+
 # F2: Detail View
 
-> **Status:** 📝 Draft  
 > **Priority:** MVP  
 > **Depends on:** F1 (Grid / List View), Database schema
 

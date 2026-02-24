@@ -1,6 +1,12 @@
+---
+id: SPEC-URL-IMPORT
+version: 1.0.0
+status: active
+adr-refs: [ADR-001, ADR-002, ADR-004]
+---
+
 # F6: URL Import (Fetch Figure from tonies.com)
 
-> **Status:** 📝 Draft  
 > **Priority:** MVP  
 > **Depends on:** F5 (Admin CRUD), Database schema, Supabase Storage
 

@@ -1,6 +1,12 @@
+---
+id: SPEC-GRID-LIST
+version: 1.0.0
+status: active
+adr-refs: [ADR-002, ADR-003, ADR-004]
+---
+
 # F1: Grid / List View
 
-> **Status:** 📝 Draft  
 > **Priority:** MVP  
 > **Depends on:** Database schema, Supabase setup
 

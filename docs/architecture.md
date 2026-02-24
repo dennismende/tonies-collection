@@ -1,7 +1,8 @@
 # Tonies Collection — Architecture Decision Record
 
 > **Status:** ✅ Decisions Finalized  
-> **Date:** 2026-02-10
+> **Date:** 2026-02-10  
+> **Pattern:** Clean Architecture (Domain-Centric)
 
 This document captures the architectural decisions for the Tonies Collection web
 application — a catalog of all Tonie box figures owned by the family.
@@ -96,18 +97,10 @@ admin panel for CRUD operations.
 
 ## 5. UI & Design System
 
-### 5.1 Styling: Tailwind CSS + Shadcn UI
+**Decision:** Tailwind CSS v4 + Shadcn UI. Light mode only for MVP.
 
-**Decision:** Follow the global rules — **Tailwind CSS v4** + **Shadcn UI**.
-
-**Aesthetic:** Minimal, high-contrast "Linear / Vercel" look. Clean whites,
-subtle borders, generous whitespace. The design system spec will be documented
-separately in `docs/design-system.md`.
-
-### 5.2 Dark Mode: Not in MVP
-
-Light-only for the first version. The Tailwind config will not include
-`darkMode` toggling.
+All visual rules — tokens, components, typography, spacing, and contribution
+guidelines — live in [`design-system.md`](design-system.md).
 
 ---
 
@@ -117,12 +110,12 @@ Light-only for the first version. The Tailwind config will not include
 
 | # | Feature | Status | Spec |
 |---|---|---|---|
-| F1 | Grid / list view of all figures | ✅ MVP | `docs/specs/grid-list-view.md` |
-| F2 | Detail view (click to expand) | ✅ MVP | `docs/specs/detail-view.md` |
-| F3 | Search & filter (name, series, favorite) | ✅ MVP | `docs/specs/search-filter.md` |
-| F4 | Sort (name, purchase date, price) | ✅ MVP | `docs/specs/sort.md` |
-| F5 | Add / edit / delete figure (admin) | ✅ MVP | `docs/specs/admin-crud.md` |
-| F6 | URL import (fetch figure data + image from URL) | ✅ MVP | `docs/specs/url-import.md` |
+| F1 | Grid / list view of all figures | ✅ MVP | `docs/specs/grid-list-view.v1.0.0.md` |
+| F2 | Detail view (click to expand) | ✅ MVP | `docs/specs/detail-view.v1.0.0.md` |
+| F3 | Search & filter (name, series, favorite) | ✅ MVP | `docs/specs/search-filter.v1.0.0.md` |
+| F4 | Sort (name, purchase date, price) | ✅ MVP | `docs/specs/sort.v1.0.0.md` |
+| F5 | Add / edit / delete figure (admin) | ✅ MVP | `docs/specs/admin-crud.v1.0.0.md` |
+| F6 | URL import (fetch figure data + image from URL) | ✅ MVP | `docs/specs/url-import.v1.0.0.md` |
 | F7 | Import from CSV / JSON | 🔜 Post-MVP | — |
 | F8 | Statistics dashboard | 🔜 Post-MVP | — |
 
@@ -171,12 +164,12 @@ tonies/
 │   ├── architecture.md          ← this file
 │   ├── design-system.md
 │   └── specs/
-│       ├── grid-list-view.md
-│       ├── detail-view.md
-│       ├── search-filter.md
-│       ├── sort.md
-│       ├── admin-crud.md
-│       └── url-import.md
+│       ├── grid-list-view.v1.0.0.md
+│       ├── detail-view.v1.0.0.md
+│       ├── search-filter.v1.0.0.md
+│       ├── sort.v1.0.0.md
+│       ├── admin-crud.v1.0.0.md
+│       └── url-import.v1.0.0.md
 ├── src/
 │   ├── app/                     ← Next.js App Router pages
 │   │   ├── (public)/            ← Public catalog routes
@@ -203,10 +196,141 @@ tonies/
 
 ---
 
+## 10. Architectural Principles
+
+These principles govern all **code-level** decisions. For UI-specific rules see
+[`design-system.md`](design-system.md) §1b.
+
+| Principle | Rule |
+|---|---|
+| **Strict Separation** | UI components never talk to the database directly. All mutations go through Server Actions (`/actions`). All reads go through server components or API routes. |
+| **Type Safety** | No implicit `any`. TypeScript `strict: true`. Use **Zod** for runtime validation of all API inputs, form data, and external data (e.g. URL import). |
+| **Error Handling** | Use a **Result pattern** (`{ success, data?, error? }`). Never fail silently. Every Server Action returns a typed result, never throws. |
+| **Server State First** | Prefer React Server Components (RSC) and server-side data fetching over client-side `useEffect` + `useState`. Client state is reserved for purely interactive concerns (form inputs, UI toggles). |
+| **Secure by Design** | Validate all inputs. Sanitize all outputs. SSRF protection on URL imports (domain allowlist). RLS at the database level. |
+
+---
+
+## 11. Development Workflow
+
+All changes follow a **spec-driven** workflow:
+
+### Phase 1: Analysis & Spec
+
+1. Analyze the impact of the request.
+2. Check `docs/specs/` for existing specifications.
+3. **Scan `docs/adr/`** for constraints that may affect the approach.
+4. Ask clarifying questions if requirements are vague.
+5. Outline a **Technical Plan** before writing any code.
+
+**If no spec exists for this task:** STOP. Draft a Delta Spec in `docs/specs/`
+with a Spec ID (`SPEC-<FEATURE>`), version `1.0.0`, and Gherkin-style acceptance
+criteria before proceeding.
+
+### Phase 2: Implementation
+
+1. Write code in small, atomic batches.
+2. Add **JSDoc** to all exported functions explaining _what_ and _why_.
+3. Ensure all new code follows the architectural principles above.
+4. Reference the Spec ID in all git commits (see §13).
+
+### Phase 3: Review & Refine
+
+Before finishing, run a self-review checklist:
+
+- [ ] Did I handle the error case?
+- [ ] Is this accessible (ARIA)?
+- [ ] Did I add JSDoc to exported functions?
+- [ ] Did I update `docs/traceability.md`?
+
+For UI-specific checks, see the checklist in
+[`design-system.md`](design-system.md) §11.
+
+Add an **"Architectural Remarks"** section to any PR or spec listing potential trade-offs or risks.
+
+---
+
+## 12. Governance
+
+### Devil's Advocate Protocol
+
+If a proposed change violates Clean Architecture (e.g. database queries in a click handler, client-side mutations bypassing Server Actions), it must be **rejected** with:
+
+1. An explanation of _why_ it is harmful (security, scalability, maintainability).
+2. A proposed **correct architectural alternative**.
+
+This applies to both human and AI-generated code suggestions.
+
+### ADR Enforcement
+
+Before implementing any change, verify it does **not** contradict an accepted
+ADR in `docs/adr/`. If a new approach is needed, write a new ADR that supersedes
+the old one before changing the code.
+
+---
+
+## 13. Versioning & Commits
+
+### Spec Version Vector
+
+Each spec in `docs/specs/` carries a SemVer version in both its **filename**
+and **frontmatter**. The filename format is `<feature>.v<VERSION>.md` (e.g.
+`search-filter.v1.0.0.md`). When a spec is bumped, a **new file** is created
+(e.g. `search-filter.v1.1.0.md`) and the old version remains for history.
+
+The version signals the magnitude of the change:
+
+| Change | Version Bump | Action |
+|---|---|---|
+| Fundamental domain/logic change | **Major** (X.0.0) | Invalidate cached context. Re-read all specs. |
+| New functionality added | **Minor** (0.Y.0) | Read the new/updated spec. Append to context. |
+| Clarification or typo fix | **Patch** (0.0.Z) | Update specific rules in memory. |
+
+### Git Commit Format
+
+All commits **must** follow the Conventional Commits format and reference the
+Spec ID being implemented:
+
+```
+<type>(<scope>): <description> (ref: <SPEC-ID> v<VERSION>)
+```
+
+**Examples:**
+
+```
+feat(catalog): add series filter (ref: SPEC-SEARCH-FILTER v1.0.0)
+fix(admin): validate image MIME type (ref: SPEC-ADMIN-CRUD v1.0.0)
+docs(specs): clarify favorite toggle behavior (ref: SPEC-GRID-LIST v1.0.1)
+```
+
+Commits that do not implement a spec (e.g. tooling, CI) use standard
+Conventional Commits without a `ref:` suffix:
+
+```
+chore(ci): add commitlint to pre-commit hooks
+```
+
+### Traceability
+
+The mapping from Spec ID → implementation files → test files is maintained in
+[`docs/traceability.md`](traceability.md). This table **must** be updated as
+part of the Definition of Done for any task that touches spec-related code.
+
+To trace the history of a file back to its spec:
+
+```bash
+git log --grep="SPEC-SEARCH-FILTER" -- src/components/filter-bar.tsx
+```
+
+---
+
 ## Next Steps
 
 1. ~~Answer architecture questions~~ ✅
-2. Create **feature specs** in `docs/specs/` for each MVP feature.
-3. Write the **Design System** spec in `docs/design-system.md`.
-4. Create a detailed **Implementation Plan** for review.
-5. Scaffold the project and begin implementation.
+2. ~~Create **feature specs** in `docs/specs/`~~ ✅
+3. ~~Write the **Design System** spec~~ ✅
+4. ~~Create a detailed **Implementation Plan**~~ ✅
+5. ~~Scaffold the project and begin implementation~~ ✅
+6. ~~Adopt governance model (ADRs, versioning, traceability)~~ ✅
+7. Connect real Supabase credentials for production.
+8. Post-MVP: CSV/JSON import, statistics dashboard, dark mode.
