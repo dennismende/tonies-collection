@@ -51,18 +51,38 @@ export function FilterBar({
     const [localQuery, setLocalQuery] = useState(query);
     const [seriesOpen, setSeriesOpen] = useState(false);
 
-    // Debounce search input
+    /**
+     * `prevQuery` — tracks the previous `query` prop for render-time change detection.
+     * `lastFlushed` — tracks the last value our debounce sent to the URL.
+     *
+     * When `query` changes AND differs from `lastFlushed`, it's an external reset
+     * (e.g. "Clear filters") and we sync it to `localQuery`.
+     * When `query` changes BUT matches `lastFlushed`, it's just the round-trip
+     * echo from our own debounce — we skip the sync to avoid overwriting input.
+     *
+     * Uses the React-endorsed "store previous props in state" pattern:
+     * https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+     */
+    const [prevQuery, setPrevQuery] = useState(query);
+    const [lastFlushed, setLastFlushed] = useState(query);
+    if (query !== prevQuery) {
+        setPrevQuery(query);
+        if (query !== lastFlushed) {
+            setLocalQuery(query);
+        }
+    }
+
+    // Debounce search input → URL.
+    // Only flush when localQuery actually differs from the current URL query
+    // to avoid a no-op router.replace that would re-render unnecessarily.
     useEffect(() => {
+        if (localQuery === query) return;
         const timer = setTimeout(() => {
+            setLastFlushed(localQuery);
             onQueryChange(localQuery);
         }, 300);
         return () => clearTimeout(timer);
-    }, [localQuery, onQueryChange]);
-
-    // Sync external query changes (e.g. clear filters)
-    useEffect(() => {
-        setLocalQuery(query);
-    }, [query]);
+    }, [localQuery, query, onQueryChange]);
 
     const toggleSeries = useCallback(
         (series: string) => {
