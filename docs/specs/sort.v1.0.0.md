@@ -1,6 +1,12 @@
+---
+id: SPEC-SORT
+version: 1.0.0
+status: active
+adr-refs: [ADR-002, ADR-003]
+---
+
 # F4: Sort
 
-> **Status:** 📝 Draft  
 > **Priority:** MVP  
 > **Depends on:** F1 (Grid / List View), F3 (Search & Filter)
 

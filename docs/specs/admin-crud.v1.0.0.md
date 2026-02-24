@@ -1,6 +1,12 @@
+---
+id: SPEC-ADMIN-CRUD
+version: 1.0.0
+status: active
+adr-refs: [ADR-001, ADR-002, ADR-004]
+---
+
 # F5: Admin CRUD (Add / Edit / Delete)
 
-> **Status:** 📝 Draft  
 > **Priority:** MVP  
 > **Depends on:** Database schema, Supabase Auth, F2 (Detail View)
 
